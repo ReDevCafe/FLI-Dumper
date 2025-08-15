@@ -670,7 +670,7 @@ void windows::LiveEditor::drawStructProperty(const EngineStructs::Struct* struc,
 		{
 			//simple drawing otherwise its too long
 			drawNonclickableMember(subMember, block, offset, secret, true);
-			ImGui::SameLineEx(10, -3);
+			ImGui::SameLineEx(10, 0);
 		}
 		ImGui::TextColored(IGHelper::Colors::grayedOut, ")");
 		return;
@@ -762,7 +762,7 @@ void windows::LiveEditor::drawNonclickableMember(const EngineStructs::Member& me
 		ImGui::TextColored(IGHelper::Colors::varPink, member.name.c_str());
 	}
 	//yeah the indent is annoying
-	ImGui::SameLineEx(8, -3);
+	ImGui::SameLineEx(8, 0);
 
 	//data not loaded?
 	if (!block->valid())
@@ -860,7 +860,7 @@ void windows::LiveEditor::drawTEnumAsByteProperty(const EngineStructs::Member& m
 		}
 	}
 
-	ImGui::SameLineEx(10, -3);
+	ImGui::SameLineEx(10, 0);
 	ImGui::PushItemWidth(350);
 	if (ImGui::BeginCombo(std::string("##" + secret + member.name).c_str(), value >= 0 ? items[value].c_str() : ""))
 	{

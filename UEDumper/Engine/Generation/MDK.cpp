@@ -160,7 +160,7 @@ void MDKGeneration::generatePackage(std::ofstream& stream, const EngineStructs::
 			{
 				if (member.missed)
 					continue;
-				char finalBuf[600];
+				char finalBuf[600] = { 0 };
 
 				std::string memberName = generateValidVarName(member.name, true);
 				if (member.name.empty())
@@ -210,7 +210,7 @@ void MDKGeneration::generatePackage(std::ofstream& stream, const EngineStructs::
 			{
 				
 				stream << "\t// Function " << func.fullName << std::endl;
-				char funcBuf[20100] = {};
+				
 				std::string params = func.returnType.stringify() + " " + func.cppName.c_str() + "(";
 				for (auto param : func.params)
 				{
@@ -225,13 +225,13 @@ void MDKGeneration::generatePackage(std::ofstream& stream, const EngineStructs::
 					params = params.erase(params.size() - 2);
 				params += ");";
 
-				if (params.length() > 20000)
+				if (params.length() > 0x10000)
 				{
 					windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_WARNING, "MDK GEN", "function %s is too big!!!!!", func.fullName);
 					continue;
 				}
 
-
+				char funcBuf[0x10000] = { 0 };
 
 				sprintf_s(funcBuf, "	// %-120s // [0x%llx] %-20s ", params.c_str(), func.binaryOffset, func.functionFlags.c_str());
 				stream << funcBuf << std::endl;

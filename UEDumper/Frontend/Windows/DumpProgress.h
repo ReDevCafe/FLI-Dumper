@@ -11,13 +11,28 @@ namespace windows
 		static inline bool bAlreadyCompleted = false;
 		static inline bool bIsBusy = false;
 
-
 		struct dumpProgress
 		{
 			int64_t finishedBytes = 0;
 			int64_t totalBytes = 1;
 			CopyStatus status = CopyStatus::CS_idle;
 		};
+
+		static inline dumpProgress GObjectPtrs{};
+		static inline dumpProgress UBigObjects{};
+		static inline dumpProgress FNames{};
+		static inline dumpProgress packages{};
+
+		static inline uint64_t startDumpTime = 0;
+
+
+		static inline bool errorOccurred = false;
+		static inline std::string errorMessage = "";
+
+
+
+
+		static void dump();
 
 
 	public:

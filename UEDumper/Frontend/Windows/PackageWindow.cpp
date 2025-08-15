@@ -46,6 +46,25 @@ void windows::PackageWindow::renderUndefinedStructs()
 	}
 }
 
+DWORD windows::PackageWindow::LoadProjectThread(LPVOID lpParam)
+{
+	// Take ownership of the string pointer
+	std::unique_ptr<std::string> stPtr(static_cast<std::string*>(lpParam));
+
+	if (EngineCore::loadProject(*stPtr, anyProgressDone, anyProgressTotal))
+	{
+		windows::LogWindow::Log(
+			windows::LogWindow::logLevels::LOGLEVEL_INFO,
+			"ENGINECORE",
+			"Project loaded!"
+		);
+		HelloWindow::setCompleted();
+	}
+
+	presentTopMostCallback = false;
+	return 0;
+}
+
 
 void windows::PackageWindow::copyPackageNames()
 {
@@ -208,15 +227,17 @@ void windows::PackageWindow::renderProjectPopup()
 				presentTopMostCallback = true;
 				anyProgressDone = 0;
 				anyProgressTotal = 1;
-				std::make_unique<std::future<void>*>(new auto(std::async(std::launch::async, [st] {
 
-					if (EngineCore::loadProject(st, anyProgressDone, anyProgressTotal))
-					{
-						windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_INFO, "ENGINECORE", "Project loaded!");
-						HelloWindow::setCompleted();
-					}
-					presentTopMostCallback = false;
-					}))).reset();
+				std::string* stCopy = new std::string(st);
+
+				CreateThread(
+					nullptr,                
+					0,                      
+					LoadProjectThread,      
+					stCopy,                 
+					0,                      
+					nullptr                 
+				);
 
 			}
 		}
