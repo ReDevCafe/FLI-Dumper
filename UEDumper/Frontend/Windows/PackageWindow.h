@@ -20,6 +20,7 @@ namespace windows
 		
 		static void renderUndefinedStructs();
 
+		static DWORD WINAPI LoadProjectThread(LPVOID lpParam);
 
 		static void copyPackageNames();
 

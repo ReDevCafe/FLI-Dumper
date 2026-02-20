@@ -549,16 +549,6 @@ void windows::LiveEditor::drawMemberArrayProperty(const EngineStructs::Member& m
 				ImGui::TreePop();
 				return;
 			}
-			//we get the first pointer so we can check what class the array indexes really are (tarray lies just like pointers)
-			const uint64_t firstIndexPtr = arrBlock->read<uint64_t>(0);
-			//look for the struct
-			if (!isValidStructName(firstIndexPtr, member.type.subTypes[0].name, st, true))
-			{
-				//this should never fail!
-				ImGui::TextColored(IGHelper::Colors::red, "Struct or Class doesnt exist in the SDK!");
-				ImGui::TreePop();
-				return;
-			}
 
 			//create a vector where we will iterate through
 			std::vector<uint64_t> objs(arr.Count);
@@ -579,6 +569,13 @@ void windows::LiveEditor::drawMemberArrayProperty(const EngineStructs::Member& m
 				//create a tree node for it
 				if (ImGui::TreeNode(std::string(std::to_string(i) + " " + member.type.subTypes[0].name + "##" + secret + std::to_string(objPtr)).c_str()))
 				{
+					if (!isValidStructName(objPtr, member.type.subTypes[0].name, st, true))
+					{
+						//this should never fail!
+						ImGui::TextColored(IGHelper::Colors::red, "Struct or Class doesnt exist in the SDK!");
+						ImGui::TreePop();
+						return;
+					}
 					ImGui::PopStyleColor();
 					ImGui::SameLineEx(0);
 					//add the *
@@ -670,7 +667,7 @@ void windows::LiveEditor::drawStructProperty(const EngineStructs::Struct* struc,
 		{
 			//simple drawing otherwise its too long
 			drawNonclickableMember(subMember, block, offset, secret, true);
-			ImGui::SameLineEx(10, -3);
+			ImGui::SameLineEx(10, 0);
 		}
 		ImGui::TextColored(IGHelper::Colors::grayedOut, ")");
 		return;
@@ -762,7 +759,7 @@ void windows::LiveEditor::drawNonclickableMember(const EngineStructs::Member& me
 		ImGui::TextColored(IGHelper::Colors::varPink, member.name.c_str());
 	}
 	//yeah the indent is annoying
-	ImGui::SameLineEx(8, -3);
+	ImGui::SameLineEx(8, 0);
 
 	//data not loaded?
 	if (!block->valid())
@@ -860,7 +857,7 @@ void windows::LiveEditor::drawTEnumAsByteProperty(const EngineStructs::Member& m
 		}
 	}
 
-	ImGui::SameLineEx(10, -3);
+	ImGui::SameLineEx(10, 0);
 	ImGui::PushItemWidth(350);
 	if (ImGui::BeginCombo(std::string("##" + secret + member.name).c_str(), value >= 0 ? items[value].c_str() : ""))
 	{

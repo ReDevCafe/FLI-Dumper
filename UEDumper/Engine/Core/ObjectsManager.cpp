@@ -67,6 +67,9 @@ ObjectsManager::ObjectsManager()
 		return;
 	}
 
+	printf("MZ header: %X\n", Memory::read<int>(Memory::getBaseAddress()));
+	printf("UObjectAddr: %llX\n", UObjectAddr);
+
 	gUObjectManager.UObjectArray = Memory::read<TypeUObjectArray>(UObjectAddr);
 
 #if GOBJECTS_XOR_ECRYPTION_KEY
@@ -84,7 +87,7 @@ ObjectsManager::ObjectsManager()
 		return;
 	}
 
-	if (gUObjectManager.UObjectArray.NumElements < 100 || gUObjectManager.UObjectArray.NumElements > 50000000)
+	if (gUObjectManager.UObjectArray.NumElements < 10000 || gUObjectManager.UObjectArray.NumElements > 50000000)
 	{
 		windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_ERROR, "OBJECTSMANAGER", "TUobject elements are invalid!");
 		errorReason = "TUobject elements are invalid! This means the OFFSET_GOBJECTS offset is wrong. The log below shows how many elements the dumper found.";
