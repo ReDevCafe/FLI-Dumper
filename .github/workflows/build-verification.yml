@@ -1,4 +1,4 @@
-name: Build FLI-Dumper and upload artifact
+name: Build FLI-Dumper and create GitHub Release
 on:
   pull_request:
   push:
