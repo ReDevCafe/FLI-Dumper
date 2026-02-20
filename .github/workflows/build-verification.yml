@@ -16,11 +16,12 @@ jobs:
 
       - name: Build
         run: msbuild /p:Configuration=Release
-      - name: Set up date-based tag
+      - name: Set date tag
+        shell: pwsh
         run: |
-          DATE_TAG="v$(date +'%Y%m%d.%H%M')"
-          echo "TAG_NAME=$DATE_TAG" >> $GITHUB_ENV
-          echo "tag=$DATE_TAG"
+          $DATE_TAG = "v" + (Get-Date -Format "yyyyMMdd.HHmm")
+          "TAG_NAME=$DATE_TAG" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "tag=$DATE_TAG"
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
