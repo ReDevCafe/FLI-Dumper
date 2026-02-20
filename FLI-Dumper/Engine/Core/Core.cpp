@@ -218,9 +218,9 @@ std::vector<Offset> EngineCore::getOffsets()
 	return offsets;
 }
 
-void EngineCore::findOffsets() {
-	if (Memory::getStatus() != Memory::inizilaized)
-		return;
+void EngineCore::setOffsets(const std::vector<Offset>& newOffsets)
+{
+	offsets = newOffsets;
 }
 
 bool EngineCore::generateFNameFile(int& progressDone, int& totalProgress)
@@ -863,7 +863,7 @@ EngineCore::EngineCore()
 	{
 		windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_ONLY_LOG, "ENGINECORE", "Loading core...");
 
-		offsets = setOffsets();
+		offsets = getOffsets();
 
 
 		gNames = getOffsetAddress(getOffsetForName("OFFSET_GNAMES"));

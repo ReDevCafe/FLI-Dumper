@@ -1,4 +1,4 @@
-name: Build UEDumper
+name: Build FLI-Dumper and upload artifact
 on:
   pull_request:
   push:
@@ -15,4 +15,19 @@ jobs:
           arch: x64
 
       - name: Build
-        run: msbuild
+        run: msbuild /p:Configuration=Release
+      - name: Set up date-based tag
+        run: |
+          DATE_TAG="v$(date +'%Y%m%d.%H%M')"
+          echo "TAG_NAME=$DATE_TAG" >> $GITHUB_ENV
+          echo "tag=$DATE_TAG"
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          body: "Automated release of ${{ github.ref_name }}."
+          generate_release_notes: true
+          token: ${{ secrets.RELEASE_CD_TOKEN }}
+          files: |
+            ./x64/Release/FLI-Dumper.exe
+            ./x64/Release/FLI-Dumper.pdb

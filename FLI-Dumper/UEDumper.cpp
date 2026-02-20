@@ -15,6 +15,7 @@
 #include "Frontend/Texture/TextureCreator.h"
 #include "Memory/memory.h"
 #include <Settings/EngineSettings.h>
+#include "Memory/GSpot.h"
 
 /*
 *    ██╗░░░██╗███████╗  ██████╗░██╗░░░██╗███╗░░░███╗██████╗░███████╗██████╗░
@@ -49,6 +50,12 @@ int main()
     windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_INFO, "MAIN", "**********************************");
     Memory();
     Memory::load("NFL1-Win64-Shipping.exe");
+    std::vector<Offset> offsets = GSpot::findOffsets();
+	for (const auto& offset : offsets)
+    {
+        windows::LogWindow::Log(windows::LogWindow::logLevels::LOGLEVEL_INFO, "GSPOT", "Found offset: %s at 0x%p", offset.name.c_str(), offset.offset);
+    }
+    EngineCore::setOffsets(offsets);
     windows::DumpProgress();
     windows::DumpProgress::dump();
     int anyProgressDone = 0;

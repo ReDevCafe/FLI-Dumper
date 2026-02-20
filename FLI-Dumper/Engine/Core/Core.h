@@ -130,7 +130,7 @@ public:
 	 */
 	EngineCore();
 
-	static void findOffsets();
+	static void setOffsets(const std::vector<Offset>& newOffsets);
 
 	static bool initSuccess();
 
