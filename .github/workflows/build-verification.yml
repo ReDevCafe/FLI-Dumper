@@ -1,7 +1,7 @@
 name: Build FLI-Dumper and create GitHub Release
 on:
-  pull_request:
   push:
+    branches: ["master"]
 jobs:
   build:
     runs-on: windows-latest
